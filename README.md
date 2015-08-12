@@ -14,6 +14,8 @@ npm install natsboard
 
 ### Usage
 
+[gnatsd server](http://nats.io/download/) **should** be running with `-m` parameter.
+
 ```
 gnatsd -m 8222
 npm start
