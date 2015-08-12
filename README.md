@@ -18,11 +18,11 @@ npm install natsboard -g
 
 ```
 gnatsd -m 8222
-npm start
+natsboard
 ```
 ```
 gnatsd -m 12345
-npm start -- --nats-url http://localhost:12345
+natsboard --nats-url http://localhost:12345
 ```
 
 ### License
