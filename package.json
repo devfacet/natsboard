@@ -1,6 +1,6 @@
 {
   "name": "natsboard",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Dashboard for monitoring NATS",
   "keywords": [
     "natsboard",
