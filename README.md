@@ -9,7 +9,7 @@ Dashboard for monitoring NATS. It provides real-time information from NATS serve
 ### Installation
 
 ```
-npm install natsboard
+npm install natsboard -g
 ```
 
 ### Usage
