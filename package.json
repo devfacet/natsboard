@@ -25,6 +25,9 @@
   },
   "contributors": [],
   "main": "./index.js",
+  "bin": {
+    "natsboard": "bin/natsboard"
+  },
   "scripts": {
     "lint": "jshint --reporter node_modules/jshint-stylish lib/*.js test/*.js",
     "lint:build": "jshint --reporter checkstyle lib/*.js test/*.js > reports/jshint-checkstyle.xml",
