@@ -42,7 +42,6 @@
   },
   "dependencies": {
     "express": "4.13.x",
-    "nodejs-websocket": "1.2.x",
     "request": "2.60.x",
     "utilex": "3.0.x"
   },
