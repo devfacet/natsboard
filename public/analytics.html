@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>NATSboard</title>
+    <title>NATSboard - Analytics</title>
 
     <!-- Style -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/flatly/bootstrap.min.css" rel="stylesheet">
-    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11-rc3/c3.min.css" rel="stylesheet"> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11-rc3/c3.min.css" rel="stylesheet">
     <link href="css/app.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -35,8 +35,8 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-              <li class="active"><a href="/">Overview</a></li>
-              <li><a href="/analytics.html">Analytics</a></li>
+              <li><a href="/">Overview</a></li>
+              <li class="active"><a href="/analytics">Analytics</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="http://github.com/cmfatih/natsboard">About</a></li>
@@ -49,49 +49,102 @@
 
       <div class="row">
 
-        <div class="col-md-6">
-
-          <table id="server-info" class="table table-bordered table-striped">
+        <div class="col-md-4">
+          <table class="table table-bordered table-striped">
             <thead>
               <tr>
-                <th colspan="2">Server Information</th>
+                <th>Connections</th>
               </tr>
             </thead>
             <tbody>
+              <tr>
+                <td><div id="connections-chart"></div></td>
+              </tr>
             </tbody>
           </table>
 
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
 
-          <table id="conn-info" class="table table-bordered table-striped">
+          <table class="table table-bordered table-striped">
             <thead>
               <tr>
-                <th colspan="2">Connections</th>
+                <th>Memory</th>
               </tr>
             </thead>
             <tbody>
+              <tr>
+                <td><div id="memory-chart"></div></td>
+              </tr>
             </tbody>
           </table>
 
-          <table id="sub-info" class="table table-bordered table-striped">
+        </div>
+
+        <div class="col-md-4">
+
+          <table class="table table-bordered table-striped">
             <thead>
               <tr>
-                <th colspan="2">Subscriptions</th>
+                <th>CPU</th>
               </tr>
             </thead>
             <tbody>
+              <tr>
+                <td><div id="cpu-chart"></div></td>
+              </tr>
             </tbody>
           </table>
 
-          <table id="route-info" class="table table-bordered table-striped">
+        </div>
+
+        <div class="col-md-4">
+
+          <table class="table table-bordered table-striped">
             <thead>
               <tr>
-                <th colspan="2">Routes</th>
+                <th>Messages</th>
               </tr>
             </thead>
             <tbody>
+              <tr>
+                <td><div id="messages-chart"></div></td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+        <div class="col-md-4">
+
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Bytes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div id="bytes-chart"></div></td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+        <div class="col-md-4">
+
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Slow Consumers</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div id="slow-consumers-chart"></div></td>
+              </tr>
             </tbody>
           </table>
 
@@ -105,8 +158,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/3.0.0/rx.lite.min.js"></script> -->
-    <!-- <script src="http://d3js.org/d3.v3.min.js"></script> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11-rc3/c3.min.js"></script> -->
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11-rc3/c3.min.js"></script>
     <script src="js/app.js"></script>
   </body>
 </html>
