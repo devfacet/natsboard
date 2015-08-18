@@ -4,7 +4,9 @@
 
 Dashboard for monitoring NATS. It provides real-time information from NATS server.
 
-![docker-vmi-builder.sh](public/img/ss-natsboard-1.png)
+![docker-vmi-builder.sh](public/img/ss-natsboard-v2-1.png)
+
+![docker-vmi-builder.sh](public/img/ss-natsboard-v2-2.png)
 
 ### Installation
 
