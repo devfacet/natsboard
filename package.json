@@ -43,7 +43,8 @@
   "dependencies": {
     "express": "4.13.x",
     "request": "2.60.x",
-    "utilex": "3.0.x"
+    "utilex": "3.0.x",
+    "nodejs-websocket": "1.2.x"
   },
   "devDependencies": {
     "chai": "3.2.x",
