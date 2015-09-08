@@ -4,72 +4,97 @@
  * For the full copyright and license information, please view the LICENSE.txt file.
  */
 
-/*jslint  browser: true */
-/*global document: false, $: false, console: false, c3: false, d3: false */
+/* jslint  browser: true */
+/* global document: false, $: false, console: false, SmoothieChart: false, TimeSeries: false */
 'use strict';
 
 // Init the module
 var app = function app() {
 
-  var serverURL = location.protocol + '//' + location.hostname + ':' + location.port;
+  var PAGE_DASHBOARD = '/dashboard.html';
 
-  var database = {
-    timeseries: {
-      connections:    { limit: 5, data: [] },
-      mem:            { limit: 5, data: [] },
-      cpu:            { limit: 5, data: [] },
-      in_msgs:        { limit: 5, data: [] },
-      out_msgs:       { limit: 5, data: [] },
-      in_bytes:       { limit: 5, data: [] },
-      out_bytes:      { limit: 5, data: [] },
-      slow_consumers: { limit: 5, data: [] }
+  // Init server
+  var serverURL    = location.protocol + '//' + location.hostname + ':' + location.port,
+      serverCharts = {};
+
+  // Init websocket
+  var wsHostname = location.hostname,
+      wsPort     = parseInt(location.port) + 1,
+      wsUrl      = 'ws://' + wsHostname + ':' + wsPort,
+      wsConn     = new WebSocket(wsUrl);
+
+  // Handler for open event
+  wsConn.onopen = function onopen() {
+    console.log('connection opened');
+  };
+
+  // Handler for close event
+  wsConn.onclose = function onclose() {
+    console.log('connection closed');
+  };
+
+  // Handler for error event
+  wsConn.onerror = function onerror() {
+    console.error('connection error');
+  };
+
+  // Handler for message event
+  wsConn.onmessage = function(event) {
+
+    // Split data by new line
+    event.data.split('\n').forEach(function(line) {
+      // Parse message from line
+      var message;
+      try {
+        message = JSON.parse(line);
+      }
+      catch(e) {
+        console.error('message could not be parsed');
+      }
+      processMessage(message);
+    });
+  };
+
+  // Processes message
+  var processMessage = function processMessage(message) {
+    if(!message && typeof message !== 'object') {
+      return false;
     }
-  },
-  charts = {
-    timeseries: {
+
+    // If page is dashboard then
+    if(location.pathname === PAGE_DASHBOARD) {
+      // If message type is rates then
+      if(message.type === 'rates') {
+        // Iterate metrics
+        [
+          {type: 'varz', metric: 'connections', data: []},
+          {type: 'varz', metric: 'mem', data: []},
+          {type: 'varz', metric: 'cpu', data: [], chartOptions: {precision: 1}},
+          {type: 'varz', metric: 'slow_consumers', data: []},
+          {type: 'varz', metric: 'in_msgs', data: []},
+          {type: 'varz', metric: 'out_msgs', data: []},
+          {type: 'varz', metric: 'in_bytes', data: []},
+          {type: 'varz', metric: 'out_bytes', data: []}
+        ].forEach(function(metric) {
+          if(message.rates[metric.type][metric.metric]) {
+            message.rates[metric.type][metric.metric].forEach(function(rate) {
+              metric.data.push({date: new Date(rate.timestamp), value: rate.value});
+            });
+          }
+          renderChart(metric.metric, metric.data, metric.chartOptions);
+        });
+      }
     }
   };
 
-  // Init websocket connection
-  // var wsHostname = location.hostname,
-  //     wsPort     = parseInt(location.port) + 1,
-  //     wsUrl      = 'ws://' + wsHostname + ':' + wsPort,
-  //     wsConn     = new WebSocket(wsUrl);
-
-  // Open event
-  // wsConn.onopen = function onopen() {
-  //   console.log('connection opened');
-  // };
-
-  // Close event
-  // wsConn.onclose = function onclose() {
-  //   console.log('connection closed');
-  // };
-
-  // Error event
-  // wsConn.onerror = function onerror() {
-  //   console.error('connection error');
-  // };
-
-  // Handle messages
-  // wsConn.onmessage = function(event) {
-
-  //   // Split data by new line
-  //   event.data.split('\n').forEach(function(line) {
-  //     // Parse message from line
-  //     var message;
-  //     try {
-  //       message = JSON.parse(line);
-  //     }
-  //     catch(e) {
-  //       console.error('message could not be parsed');
-  //     }
-  //   });
-  // };
+  // Gets server url
+  var getServerUrl = function getServerUrl() {
+    return serverURL;
+  };
 
   // Gets data
-  var getData = function getData(type, cb) {
-    $.getJSON(serverURL + '/data/' + type)
+  var getData = function getData(url, type, cb) {
+    $.getJSON(url + '/nats/' + type)
     .done(function(data) {
       return cb(null, data);
     })
@@ -78,435 +103,199 @@ var app = function app() {
     });
   };
 
-  // Updates database
-  var updateDatabase = function updateDatabase(type, data) {
-    if(!data) {
-      return;
-    }
-
-    // Update time-series database
-    if(type === 'ts') {
-      var time = new Date(data.now);
-
-      // Iterate data
-      $.each(data, function(key, val) {
-        // If key is defined in database then
-        if(database.timeseries[key]) {
-          // Add into database
-          database.timeseries[key].data.push({columns: [time, val]});
-          // If data length is greater then limit
-          if(database.timeseries[key].data.length > database.timeseries[key].limit) {
-            // Remove it from database
-            database.timeseries[key].data.shift();
-          }
-        }
-      });
-    }
-  };
-
-  // Updates chart
-  var updateChart = function updateChart(type, chartName) {
-    if(!chartName) {
-      return;
-    }
-
-    // Update time-series chart
-    if(type === 'ts') {
-      if(!charts.timeseries[chartName] || !charts.timeseries[chartName].chart) {
-        console.log('updateChart: invalid chart ' + chartName);
-      }
-
-      var chartObj = charts.timeseries[chartName];
-
-      // Prepare columns
-      var columns = [];
-
-      for(var i = 0, len = chartObj.labels.length; i < len; i++) {
-        var label      = chartObj.labels[i],
-            columnData = [label];
-
-        // If metrics is defined then
-        if(chartObj.metrics) {
-          // It's a custom chart
-          var metrics    = chartObj.metrics,
-              metricData = [label];
-          // Iterate metrics
-          database.timeseries[metrics[i]].data.forEach(function(data) {
-            // 0 for time, 1 for metric value
-            var index = (i > 1) ? 1 : i;
-            metricData.push(data.columns[index]);
-          });
-          columns.push(metricData);
-        }
-        else {
-          // It's a standard chart
-          if(database.timeseries[chartName]) {
-            database.timeseries[chartName].data.forEach(function(data) {
-              columnData.push(data.columns[i]);
-            });
-          }
-          columns.push(columnData);
-        }
-      }
-      chartObj.chart.load({columns: columns});
-
-      // Update labels
-      var xLabelVals = [];
-      for(var k = 1, len = columns.length; k < len; k++) {
-        xLabelVals.push(columns[k][columns[k].length-1]);
-      }
-      chartObj.chart.axis.labels({x: xLabelVals.join('/') + chartObj.axisXLabelSufix});
-      chartObj.chart.axis.min({y: 1});
-    }
+  // Gets all data
+  var getDataAll = function getDataAll(url, cb) {
+    $.getJSON(url + '/nats/_all')
+    .done(function(data) {
+      return cb(null, data);
+    })
+    .fail(function(jqxhr) {
+      return cb(new Error('failed to fetch data: ' + jqxhr.status + ' - ' + jqxhr.statusText));
+    });
   };
 
   // Renders table information
   var renderTableInfo = function renderTableInfo(type, data) {
     if(!data) {
-      return;
+      return false;
     }
 
     // Iterate data
-    $.each(data, function(key, val) {
-      // If element exists then
-      var elem = $('#' + type + '-info-row-' + key);
+    for(var key in data) {
+      if(data.hasOwnProperty(key)) {
 
-      if(typeof val === 'object' || (val instanceof Array)) {
-        val = '...';
+        var elem    = $('#' + type + '-info-row-' + key),
+            val     = data[key],
+            display = true;
+
+        // If the key is not a private then
+        if(key.indexOf('_') !== 0) {
+
+          // If value it is an object / array then
+          if(typeof val === 'object' || (val instanceof Array)) {
+            display = false; // do not display
+          }
+
+          if(display) {
+            // If element exists then
+            if(elem.length) {
+              // Update info
+              elem.html('<td>'+key+'</td><td>'+val+'</td>');
+            }
+            else {
+              // Otherwise add info
+              $('#' + type + '-info > tbody:last-child').append('<tr id="' + type + '-info-row-'+key+'"><td>'+key+'</td><td>'+val+'</td></tr>');
+            }
+          }
+        }
+      }
+    }
+
+    return true;
+  };
+
+  // Renders chart
+  var renderChart = function renderChart(type, data, chartOptions) {
+    if(!data) {
+      return false;
+    }
+    else if(typeof SmoothieChart !== 'function') {
+      return false;
+    }
+
+    if(!chartOptions || typeof chartOptions !== 'object') {
+      chartOptions = {};
+    }
+
+    // If the chart is not defined then
+    if(!serverCharts[type]) {
+
+      // Create chart
+      var lastRate = {};
+
+      // Custom range function
+      var myYRangeFunction = function myYRangeFunction(range) {
+        var min = !isNaN(range.min) ? range.min : 0,
+            max = !isNaN(range.max) ? range.max : 1;
+
+        min = (max > 1000) ? min : 0;
+        max = max*1.1;
+
+        return {min: min, max: max};
+      };
+
+      // Check chart options
+      if(!chartOptions.grid) {
+        chartOptions.grid = {};
+      }
+      if(!chartOptions.labels) {
+        chartOptions.labels = {};
       }
 
-      if(elem.length) {
-        // Update info
-        elem.html('<td>'+key+'</td><td>'+val+'</td>');
+      chartOptions.grid.fillStyle        = '#ffffff';
+      chartOptions.grid.strokeStyle      = '#f5f5f5';
+      chartOptions.grid.borderVisible    = true;
+      chartOptions.grid.verticalSections = 5;
+      chartOptions.grid.millisPerLine    = 1000;
+      chartOptions.labels.fillStyle      = '#515151';
+      chartOptions.labels.precision      = chartOptions.precision || 0;
+      chartOptions.labels.disabled       = true;
+      chartOptions.minValue              = 0;
+      chartOptions.yRangeFunction        = myYRangeFunction;
+
+      var chart  = new SmoothieChart(chartOptions),
+          series = new TimeSeries();
+
+      chart.addTimeSeries(series, {
+        lineWidth:   3,
+        strokeStyle: '#00bd9c',
+        fillStyle:   'rgba(0,189,156,0.30)'
+      });
+
+      // Iterate data
+      if(data instanceof Array) {
+        for(var i = 0, len = data.length; i < len; i++) {
+          if(data[i].date && typeof data[i].value !== 'undefined') {
+            series.append(data[i].date, data[i].value); // append into series
+            lastRate = data[i];
+          }
+        }
       }
-      else {
-        // Otherwise add info
-        $('#' + type + '-info > tbody:last-child').append('<tr id="' + type + '-info-row-'+key+'"><td>'+key+'</td><td>'+val+'</td></tr>');
+
+      // Add it to charts
+      serverCharts[type] = {chart: chart, series: [series]};
+      // Start stream
+      chart.streamTo(document.getElementById(type + '-chart'), 1000);
+    }
+    else {
+      lastRate = data.slice(-1)[0];
+      if(lastRate.date && typeof lastRate.value !== 'undefined') {
+        serverCharts[type].series[0].append(lastRate.date, lastRate.value); // append into series
       }
+    }
+
+    // Update chart value
+    var elemVal = $('#' + type + '-chart-value');
+    if(elemVal.length) {
+      elemVal.text((lastRate && lastRate.value) || 0);
+    }
+
+    return serverCharts[type];
+  };
+
+  // Handler for index page
+  var indexHandler = function indexHandler(url) {
+    // Get all data
+    getDataAll(url, function(err, data) {
+      if(err) {
+        console.error(err);
+      }
+      // Iterate information types
+      ['varz', 'connz', 'subscriptionsz', 'routez'].forEach(function(type) {
+        renderTableInfo(type, data[type] || null);
+      });
     });
+
+    return true;
   };
 
-  // Renders connection chart
-  var renderConnChart = function renderConnChart() {
-    if(!charts.timeseries.connections) {
-      charts.timeseries.connections = {
-        labels: ['x', 'Connections'],
-        axisXLabelSufix: ' connections',
-        chart: c3.generate({
-          bindto: '#connections-chart',
-          size: {
-            height: 200
-          },
-          data: {
-            x : 'x',
-            columns: []
-          },
-          point: {
-            show: true
-          },
-          axis : {
-            x : {
-              type : 'timeseries',
-              tick : {
-                //format : '%H:%M:%S'
-                format : ' ',
-                outer: false,
-                centered: true
-              },
-              label: {
-                position: 'inner-center'
-              }
-            },
-            y: {
-              tick: {
-                format: d3.format('d'),
-                outer: false
-              }
-            }
-          }
-        })
-      };
+  // Handler for dashboard page
+  var dashboardHandler = function dashboardHandler() {
+    return true;
+  };
+
+  // Handles routes
+  var routeHandler = function routeHandler(route) {
+    switch(route) {
+      case '/':
+        // Index page
+        indexHandler(getServerUrl());
+        break;
+      case '/dashboard.html':
+        // Dashboard page
+        dashboardHandler();
+        break;
+      // Default
+      default:
+        break;
     }
-    updateChart('ts', 'connections');
   };
 
-  // Renders memory chart
-  var renderMemChart = function renderMemChart() {
-    if(!charts.timeseries.mem) {
-      charts.timeseries.mem = {
-        labels: ['x', 'Memory'],
-        axisXLabelSufix: ' bytes',
-        chart: c3.generate({
-          bindto: '#memory-chart',
-          size: {
-            height: 200
-          },
-          data: {
-            x : 'x',
-            columns: []
-          },
-          point: {
-            show: false
-          },
-          axis : {
-            x : {
-              type : 'timeseries',
-              tick : {
-                //format : '%H:%M:%S'
-                format : ' ',
-                outer: false
-              },
-              label: {
-                position: 'inner-center'
-              }
-            },
-            y: {
-              tick: {
-                format: d3.format('s'),
-                outer: false
-              }
-            }
-          }
-        })
-      };
-    }
-    updateChart('ts', 'mem');
-  };
-
-  // Renders CPU chart
-  var renderCPUChart = function renderCPUChart() {
-    if(!charts.timeseries.cpu) {
-      charts.timeseries.cpu = {
-        labels: ['x', 'CPU'],
-        axisXLabelSufix: '% CPU',
-        chart: c3.generate({
-          bindto: '#cpu-chart',
-          size: {
-            height: 200
-          },
-          data: {
-            x : 'x',
-            columns: []
-          },
-          point: {
-            show: false
-          },
-          axis: {
-            x: {
-              type : 'timeseries',
-              tick : {
-                //format : '%H:%M:%S'
-                format : ' ',
-                outer: false
-              },
-              label: {
-                position: 'inner-center'
-              }
-            },
-            y: {
-              outer: false
-            }
-          }
-        })
-      };
-    }
-    updateChart('ts', 'cpu');
-  };
-
-  // Renders message chart
-  var renderMsgChart = function renderMsgChart() {
-    if(!charts.timeseries.messages) {
-      charts.timeseries.messages = {
-        labels: ['x', 'In', 'Out'],
-        metrics: ['in_msgs', 'in_msgs', 'out_msgs'],
-        axisXLabelSufix: ' messages',
-        chart: c3.generate({
-          bindto: '#messages-chart',
-          size: {
-            height: 200
-          },
-          data: {
-            x : 'x',
-            columns: [['x', 0]]
-          },
-          point: {
-            show: false
-          },
-          axis : {
-            x : {
-              type : 'timeseries',
-              tick : {
-                //format : '%H:%M:%S'
-                format : ' ',
-                outer: false
-              },
-              label: {
-                position: 'inner-center'
-              }
-            },
-            y: {
-              tick: {
-                format: d3.format('s'),
-                outer: false
-              }
-            }
-          }
-        })
-      };
-    }
-    updateChart('ts', 'messages');
-  };
-
-  // Renders bytes chart
-  var renderBytesChart = function renderBytesChart() {
-    if(!charts.timeseries.bytes) {
-      charts.timeseries.bytes = {
-        labels: ['x', 'In', 'Out'],
-        metrics: ['in_bytes', 'in_bytes', 'out_bytes'],
-        axisXLabelSufix: ' bytes',
-        chart: c3.generate({
-          bindto: '#bytes-chart',
-          size: {
-            height: 200
-          },
-          data: {
-            x : 'x',
-            columns: []
-          },
-          point: {
-            show: false
-          },
-          axis : {
-            x : {
-              type : 'timeseries',
-              tick : {
-                //format : '%H:%M:%S'
-                format : ' ',
-                outer: false
-              },
-              label: {
-                position: 'inner-center'
-              }
-            },
-            y: {
-              tick: {
-                format: d3.format('s'),
-                outer: false
-              }
-            }
-          }
-        })
-      };
-    }
-    updateChart('ts', 'bytes');
-  };
-
-  // Renders slow consumer chart
-  var renderConsumersChart = function renderConsumersChart() {
-    if(!charts.timeseries.slow_consumers) {
-      charts.timeseries.slow_consumers = {
-        labels: ['x', 'Slow Consumers'],
-        axisXLabelSufix: ' consumers',
-        chart: c3.generate({
-          bindto: '#slow-consumers-chart',
-          size: {
-            height: 200
-          },
-          data: {
-            x : 'x',
-            columns: []
-          },
-          point: {
-            show: true
-          },
-          axis : {
-            x : {
-              type : 'timeseries',
-              tick : {
-                //format : '%H:%M:%S'
-                format : ' ',
-                outer: false,
-                centered: true
-              },
-              label: {
-                position: 'inner-center'
-              }
-            },
-            y: {
-              tick: {
-                format: d3.format('d'),
-                outer: false
-              }
-            }
-          }
-        })
-      };
-    }
-    updateChart('ts', 'slow_consumers');
-  };
-
+  // Return
   return {
-    getData:              getData,
-    updateDatabase:       updateDatabase,
-    renderTableInfo:      renderTableInfo,
-    renderConnChart:      renderConnChart,
-    renderMemChart:       renderMemChart,
-    renderCPUChart:       renderCPUChart,
-    renderMsgChart:       renderMsgChart,
-    renderBytesChart:     renderBytesChart,
-    renderConsumersChart: renderConsumersChart
+    getServerUrl:    getServerUrl,
+    renderTableInfo: renderTableInfo,
+    renderChart:     renderChart,
+    getData:         getData,
+    getDataAll:      getDataAll,
+    routeHandler:    routeHandler
   };
 };
 
+// Init app
+var myApp = app();
+
 // Run app
 $(document).ready(function() {
-  var myApp = app();
-
-  // Index page
-  if(location.pathname === '/') {
-
-    // Render server information
-    myApp.getData('varz', function(err, data) {
-      myApp.renderTableInfo('server', data);
-    });
-
-    // Render connection information
-    myApp.getData('connz', function(err, data) {
-      myApp.renderTableInfo('conn', data);
-    });
-
-    // Render subscriptions information
-    myApp.getData('subscriptionsz', function(err, data) {
-      myApp.renderTableInfo('sub', data);
-    });
-
-    // Render route information
-    myApp.getData('routez', function(err, data) {
-      myApp.renderTableInfo('route', data);
-    });
-
-  }
-
-  // Analytics page
-  if(location.pathname === '/analytics.html') {
-
-    // Update time-series database
-    var running = false;
-    setInterval(function() {
-      // If it is not running then
-      if(!running) {
-        running = true;
-        myApp.getData('varz', function(err, data) {
-          myApp.updateDatabase('ts', data);
-          myApp.renderConnChart();
-          myApp.renderMemChart();
-          myApp.renderCPUChart();
-          myApp.renderMsgChart();
-          myApp.renderBytesChart();
-          myApp.renderConsumersChart();
-          running = false;
-        });
-      }
-    }, 1000);
-  }
+  myApp.routeHandler(location.pathname);
 });
