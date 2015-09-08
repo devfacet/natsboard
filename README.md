@@ -2,11 +2,13 @@
 
 [![NPM][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
 
-Dashboard for monitoring NATS. It provides real-time information from NATS server.
+Dashboard for monitoring NATS. It provides real-time information from NATS server. 
 
-![docker-vmi-builder.sh](public/img/ss-natsboard-v2-1.png)
+![Overview](public/img/ss-natsboard-v3-1.png)
 
-![docker-vmi-builder.sh](public/img/ss-natsboard-v2-2.png)
+![Connections](public/img/ss-natsboard-v3-2.png)
+
+![Dashboard](public/img/ss-natsboard-v3-3.png)
 
 ### Installation
 
