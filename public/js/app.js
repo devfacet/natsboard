@@ -154,6 +154,54 @@ var app = function app() {
     return true;
   };
 
+  // Renders connections table
+  var renderTableConns = function renderTableConns(data) {
+    if(!data) {
+      return false;
+    }
+
+    var content;
+
+    // Iterate data
+    for(var key in data.connections) {
+      if(data.connections.hasOwnProperty(key)) {
+
+        var val = data.connections[key];
+
+        // Row
+        content += '<tr id="connz-list-row-' + val.cid + '" class="small">';
+
+        // Columns
+        content += '<td>' + val.cid + '</td>';
+        content += '<td>' + val.ip + '</td>';
+        content += '<td>' + val.port + '</td>';
+        content += '<td>' + val.pending_bytes + '</td>';
+        content += '<td>' + val.in_msgs + '</td>';
+        content += '<td>' + val.out_msgs + '</td>';
+        content += '<td>' + val.in_bytes + '</td>';
+        content += '<td>' + val.out_bytes + '</td>';
+        content += '<td>' + val.subscriptions + '</td>';
+        content += '<td>' + val.lang + '/' + val.version + '</td>';
+
+        content += '</tr>';
+      }
+    }
+
+    // If content exists then
+    if(content) {
+      // Add into table
+      $('#connz-list > tbody:last-child').append(content);
+
+      // Update table value
+      var elemVal = $('#connz-list-value');
+      if(elemVal.length) {
+        elemVal.text((data.num_connections || 0) + ' connections');
+      }
+    }
+
+    return true;
+  };
+
   // Renders chart
   var renderChart = function renderChart(type, data, chartOptions) {
     if(!data) {
@@ -264,6 +312,19 @@ var app = function app() {
     return true;
   };
 
+  // Handler for connections page
+  var connsHandler = function connsHandler(url) {
+    // Get all data
+    getData(url, 'connz', function(err, data) {
+      if(err) {
+        console.error(err);
+      }
+      renderTableConns(data);
+    });
+
+    return true;
+  };
+
   // Handles routes
   var routeHandler = function routeHandler(route) {
     switch(route) {
@@ -275,6 +336,10 @@ var app = function app() {
         // Dashboard page
         dashboardHandler();
         break;
+      case '/connections.html':
+        // Dashboard page
+        connsHandler(getServerUrl());
+        break;
       // Default
       default:
         break;
@@ -283,12 +348,7 @@ var app = function app() {
 
   // Return
   return {
-    getServerUrl:    getServerUrl,
-    renderTableInfo: renderTableInfo,
-    renderChart:     renderChart,
-    getData:         getData,
-    getDataAll:      getDataAll,
-    routeHandler:    routeHandler
+    routeHandler: routeHandler
   };
 };
 
