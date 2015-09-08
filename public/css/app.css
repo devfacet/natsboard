@@ -5,3 +5,7 @@ body {
 .chart-value {
   color: #00bd9c;
 }
+
+.table-value {
+  font-weight: bold;
+}
