@@ -1,5 +1,9 @@
 ## Changelog
 
+### 3.0.1 (2015-09-14)
+
+* Changes for static file serving
+
 ### 3.0.0 (2015-09-07)
 
 * Add client lib
