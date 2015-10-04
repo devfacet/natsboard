@@ -1,5 +1,12 @@
 ## Changelog
 
+### 3.1.0 (2015-10-04)
+
+* Add subscriptions list to connections page
+* Remove getDataAll
+* Add query support for `nats` route
+* Update dependencies
+
 ### 3.0.1 (2015-09-14)
 
 * Changes for static file serving
