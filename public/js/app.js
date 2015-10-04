@@ -162,15 +162,13 @@ var app = function app() {
 
         // Columns
         content += '<td>' + val.cid + '</td>';
-        content += '<td>' + val.ip + '</td>';
-        content += '<td>' + val.port + '</td>';
+        content += '<td>' + val.ip + ':' + val.port + '</td>';
         content += '<td>' + val.pending_bytes + '</td>';
-        content += '<td>' + val.in_msgs + '</td>';
-        content += '<td>' + val.out_msgs + '</td>';
-        content += '<td>' + val.in_bytes + '</td>';
-        content += '<td>' + val.out_bytes + '</td>';
+        content += '<td>' + val.in_msgs + ' / ' + val.out_msgs + '</td>';
+        content += '<td>' + val.in_bytes + ' / ' + val.out_bytes + '</td>';
+        content += '<td>' + val.lang + ' / ' + val.version + '</td>';
         content += '<td>' + val.subscriptions + '</td>';
-        content += '<td>' + val.lang + '/' + val.version + '</td>';
+        content += '<td>' + val.subscriptions_list.join(', ') + '</td>';
 
         content += '</tr>';
       }
