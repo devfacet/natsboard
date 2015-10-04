@@ -93,19 +93,8 @@ var app = function app() {
   };
 
   // Gets data
-  var getData = function getData(url, type, cb) {
-    $.getJSON(url + '/nats/' + type)
-    .done(function(data) {
-      return cb(null, data);
-    })
-    .fail(function(jqxhr) {
-      return cb(new Error('failed to fetch data: ' + jqxhr.status + ' - ' + jqxhr.statusText));
-    });
-  };
-
-  // Gets all data
-  var getDataAll = function getDataAll(url, cb) {
-    $.getJSON(url + '/nats/_all')
+  var getData = function getData(url, cb) {
+    $.getJSON(url)
     .done(function(data) {
       return cb(null, data);
     })
@@ -294,7 +283,7 @@ var app = function app() {
   // Handler for index page
   var indexHandler = function indexHandler(url) {
     // Get all data
-    getDataAll(url, function(err, data) {
+    getData(url+'/nats/_all', function(err, data) {
       if(err) {
         console.error(err);
       }
@@ -315,7 +304,7 @@ var app = function app() {
   // Handler for connections page
   var connsHandler = function connsHandler(url) {
     // Get all data
-    getData(url, 'connz', function(err, data) {
+    getData(url+'/nats/connz?subs=1', function(err, data) {
       if(err) {
         console.error(err);
       }
