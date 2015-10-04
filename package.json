@@ -30,10 +30,10 @@
   },
   "scripts": {
     "lint": "jshint --reporter node_modules/jshint-stylish lib/*.js test/*.js",
-    "lint:build": "jshint --reporter checkstyle lib/*.js test/*.js > reports/jshint-checkstyle.xml",
+    "lint:build": "mkdir -p reports/ && jshint --reporter checkstyle lib/*.js test/*.js > reports/jshint-checkstyle.xml",
     "depcheck": "dependency-check . lib/*",
     "depcheck:unused": "dependency-check ./package.json --unused --no-dev lib/*",
-    "test:unit": "mkdir -p reports/ && NODE_ENV=test multi='spec=- xunit=reports/mocha-xunit.xml' istanbul cover _mocha -- -R mocha-multi --timeout 10000 && istanbul check-coverage",
+    "test:unit": "mkdir -p reports/ && NODE_ENV=test multi='spec=- xunit=reports/mocha-xunit.xml' istanbul cover _mocha -- -R mocha-multi test/test-*.js --timeout 10000 && istanbul check-coverage",
     "test": "npm run depcheck && npm run depcheck:unused && npm run lint && npm run test:unit",
     "start": "bin/natsboard"
   },
@@ -44,15 +44,15 @@
     "express": "4.13.x",
     "request": "2.60.x",
     "utilex": "3.0.x",
-    "nodejs-websocket": "1.2.x"
+    "nodejs-websocket": "1.4.x"
   },
   "devDependencies": {
-    "chai": "3.2.x",
+    "chai": "3.3.x",
     "jshint": "2.8.x",
     "jshint-stylish": "2.0.x",
-    "mocha": "2.2.x",
+    "mocha": "2.3.x",
     "mocha-multi": "0.7.x",
     "dependency-check": "2.5.x",
-    "istanbul": "^0.3.17"
+    "istanbul": "0.3.x"
   }
 }
