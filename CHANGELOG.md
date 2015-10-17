@@ -1,5 +1,10 @@
 ## Changelog
 
+### 4.0.0 (2015-10-17)
+
+* Change `NATS_URL` to `NATS_MON_URL`
+* Add routes page
+
 ### 3.1.0 (2015-10-04)
 
 * Add subscriptions list to connections page
