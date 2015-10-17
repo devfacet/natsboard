@@ -189,6 +189,53 @@ var app = function app() {
     return true;
   };
 
+  // Renders routes table
+  var renderTableRoutes = function renderTableRoutes(data) {
+    if(!data) {
+      return false;
+    }
+
+    var content;
+
+    // Iterate data
+    for(var key in data.routes) {
+      if(data.routes.hasOwnProperty(key)) {
+
+        var val = data.routes[key];
+
+        // Row
+        content += '<tr id="routez-list-row-' + val.cid + '" class="small">';
+
+        // Columns
+        content += '<td>' + val.rid + '</td>';
+        content += '<td>' + val.ip + ':' + val.port + '</td>';
+        content += '<td>' + val.remote_id + '</td>';
+        content += '<td>' + val.did_solicit + '</td>';
+        content += '<td>' + val.pending_size + '</td>';
+        content += '<td>' + val.in_msgs + ' / ' + val.out_msgs + '</td>';
+        content += '<td>' + val.in_bytes + ' / ' + val.out_bytes + '</td>';
+        content += '<td>' + val.subscriptions + '</td>';
+        content += '<td>' + (val.subscriptions_list ? val.subscriptions_list.join(', ') : '') + '</td>';
+
+        content += '</tr>';
+      }
+    }
+
+    // If content exists then
+    if(content) {
+      // Add into table
+      $('#routez-list > tbody:last-child').append(content);
+
+      // Update table value
+      var elemVal = $('#routez-list-value');
+      if(elemVal.length) {
+        elemVal.text((data.num_routes || 0) + ' routes');
+      }
+    }
+
+    return true;
+  };
+
   // Renders chart
   var renderChart = function renderChart(type, data, chartOptions) {
     if(!data) {
@@ -312,6 +359,19 @@ var app = function app() {
     return true;
   };
 
+  // Handler for routes page
+  var routesHandler = function routesHandler(url) {
+    // Get all data
+    getData(url+'/nats/routez?subs=1', function(err, data) {
+      if(err) {
+        console.error(err);
+      }
+      renderTableRoutes(data);
+    });
+
+    return true;
+  };
+
   // Handles routes
   var routeHandler = function routeHandler(route) {
     switch(route) {
@@ -324,8 +384,12 @@ var app = function app() {
         dashboardHandler();
         break;
       case '/connections.html':
-        // Dashboard page
+        // Connections page
         connsHandler(getServerUrl());
+        break;
+      case '/routes.html':
+        // Routes page
+        routesHandler(getServerUrl());
         break;
       // Default
       default:
