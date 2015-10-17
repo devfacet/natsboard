@@ -8,6 +8,8 @@ Dashboard for monitoring NATS. It provides real-time information from NATS serve
 
 ![Connections](public/img/ss-natsboard-v3-2.png)
 
+![Routes](public/img/ss-natsboard-v3-4.png)
+
 ![Dashboard](public/img/ss-natsboard-v3-3.png)
 
 ### Installation
@@ -35,7 +37,7 @@ Licensed under The MIT License (MIT)
 For the full copyright and license information, please view the LICENSE.txt file.
 
 [npm-url]: http://npmjs.org/package/natsboard
-[npm-image]: https://badge.fury.io/js/natsboard.png
+[npm-image]: https://badge.fury.io/js/natsboard.svg
 
 [travis-url]: https://travis-ci.org/cmfatih/natsboard
 [travis-image]: https://travis-ci.org/cmfatih/natsboard.svg?branch=master
