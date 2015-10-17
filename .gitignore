@@ -3,13 +3,14 @@
 .settings
 .coverrun
 .coverdata
+.env
 *.log
 *.heapsnapshot
 xunit.xml
 npm-debug.log
 
 node_modules/
+sources/
 tmp/*
 logs/*
 reports/*
-sources/
