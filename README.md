@@ -28,7 +28,7 @@ natsboard
 ```
 ```
 gnatsd -m 12345
-natsboard --nats-url http://localhost:12345
+natsboard --nats-mon-url http://localhost:12345
 ```
 
 ### License
