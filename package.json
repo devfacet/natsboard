@@ -9,19 +9,19 @@
     "monitoring",
     "real-time"
   ],
-  "homepage": "http://github.com/cmfatih/natsboard",
+  "homepage": "http://github.com/fatihcode/natsboard",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cmfatih/natsboard.git"
+    "url": "https://github.com/fatihcode/natsboard.git"
   },
   "bugs": {
-    "url": "http://github.com/cmfatih/natsboard/issues"
+    "url": "http://github.com/fatihcode/natsboard/issues"
   },
   "license": "MIT",
   "private": false,
   "author": {
-    "name": "cmfatih",
-    "url": "http://github.com/cmfatih"
+    "name": "fatih",
+    "url": "http://github.com/fatihcode"
   },
   "contributors": [],
   "main": "./index.js",

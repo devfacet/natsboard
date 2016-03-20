@@ -39,5 +39,5 @@ For the full copyright and license information, please view the LICENSE.txt file
 [npm-url]: http://npmjs.org/package/natsboard
 [npm-image]: https://badge.fury.io/js/natsboard.svg
 
-[travis-url]: https://travis-ci.org/cmfatih/natsboard
-[travis-image]: https://travis-ci.org/cmfatih/natsboard.svg?branch=master
+[travis-url]: https://travis-ci.org/fatihcode/natsboard
+[travis-image]: https://travis-ci.org/fatihcode/natsboard.svg?branch=master
