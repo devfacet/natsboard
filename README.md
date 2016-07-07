@@ -2,7 +2,7 @@
 
 [![NPM][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
 
-Dashboard for monitoring NATS. It provides real-time information from NATS server. 
+Dashboard for monitoring NATS. It provides real-time information from NATS server.
 
 ![Overview](public/img/ss-natsboard-v3-1.png)
 
@@ -30,7 +30,9 @@ natsboard
 gnatsd -m 12345
 natsboard --nats-mon-url http://localhost:12345
 ```
-
+#### Docker Usage
+docker run -d -p 3000:3000 -p 3001:3001 --env NATS_MONITOR_URL=http://IPADDRESS:8222 urashidmalik/natsboard
+- Replace IPADDRESS with ip or host of nats machine/vm/host running docker container
 ### License
 
 Licensed under The MIT License (MIT)  

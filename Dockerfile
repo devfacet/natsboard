@@ -3,7 +3,7 @@ RUN npm install natsboard -g
 #ENV URL $NATS_MONITOR_URL
 
 EXPOSE 3000
-CMD natsboard --nats-mon-url $NATS_MONITOR_URL
+CMD natsboard --nats-mon-url ${NATS_MONITOR_URL}
 
 # Build
 #docker build -t urashidmalik/natsboard .
