@@ -1,5 +1,10 @@
 ## Changelog
 
+### 4.0.2 (2016-09-24)
+
+* Update dependencies
+* Show connections without subscriptions (fixes #2 and #6)
+
 ### 4.0.1 (2016-03-20)
 
 * Maintenance
