@@ -6,8 +6,7 @@
     "natsboard",
     "nats",
     "dashboard",
-    "monitoring",
-    "real-time"
+    "monitoring"
   ],
   "homepage": "http://github.com/fatihcode/natsboard",
   "repository": {
@@ -41,18 +40,18 @@
     "node": ">=0.10.0"
   },
   "dependencies": {
-    "express": "4.13.x",
-    "request": "2.60.x",
+    "express": "4.14.x",
+    "request": "2.75.x",
     "utilex": "3.0.x",
-    "nodejs-websocket": "1.4.x"
+    "nodejs-websocket": "1.7.x"
   },
   "devDependencies": {
-    "chai": "3.3.x",
-    "jshint": "2.8.x",
-    "jshint-stylish": "2.0.x",
-    "mocha": "2.3.x",
-    "mocha-multi": "0.7.x",
-    "dependency-check": "2.5.x",
-    "istanbul": "0.3.x"
+    "chai": "3.5.x",
+    "jshint": "2.9.x",
+    "jshint-stylish": "2.2.x",
+    "mocha": "2.5.x",
+    "mocha-multi": "0.9.x",
+    "dependency-check": "2.6.x",
+    "istanbul": "0.4.x"
   }
 }
