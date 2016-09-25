@@ -168,7 +168,7 @@ var app = function app() {
         content += '<td>' + val.in_msgs + ' / ' + val.out_msgs + '</td>';
         content += '<td>' + val.in_bytes + ' / ' + val.out_bytes + '</td>';
         content += '<td>' + val.subscriptions + '</td>';
-        content += '<td>' + val.subscriptions_list.join(', ') + '</td>';
+        content += '<td>' + (val.subscriptions_list ? val.subscriptions_list.join(', ') : '') + '</td>';
 
         content += '</tr>';
       }
