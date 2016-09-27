@@ -1,0 +1,17 @@
+version: "2"
+
+services:
+  nats:
+    image: nats
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+
+  natsboard:
+    build: .
+    command: bin/natsboard --nats-mon-url http://nats:8222
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    depends_on:
+      - nats
