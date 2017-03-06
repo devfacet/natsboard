@@ -20,7 +20,7 @@ npm install natsboard -g
 
 ## Usage
 
-[gnatsd server](http://nats.io/download/) **should** be running with `-m` parameter.
+[gnatsd server](http://nats.io/download/) **must** be running with `-m` parameter.
 
 ```bash
 gnatsd -m 8222
