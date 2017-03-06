@@ -1,6 +1,5 @@
 /*
  * NATSboard
- * Copyright (c) 2015 Fatih Cetinkaya (http://github.com/fatihcode/natsboard)
  * For the full copyright and license information, please view the LICENSE.txt file.
  */
 
@@ -249,11 +248,11 @@ var app = function app() {
       chartOptions = {};
     }
 
+    var lastRate = {};
+
     // If the chart is not defined then
     if(!serverCharts[type]) {
-
       // Create chart
-      var lastRate = {};
 
       // Custom range function
       var myYRangeFunction = function myYRangeFunction(range) {

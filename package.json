@@ -2,56 +2,47 @@
   "name": "natsboard",
   "version": "4.0.2",
   "description": "Dashboard for monitoring NATS",
+  "main": "index.js",
+  "bin": {
+    "natsboard": "bin/natsboard"
+  },
+  "scripts": {
+    "lint": "jshint --reporter node_modules/jshint-stylish lib/* test/*",
+    "lint:build": "jshint --reporter checkstyle lib/* test/* > reports/jshint-checkstyle.xml",
+    "depcheck": "dependency-check . lib/*",
+    "depcheck:unused": "dependency-check ./package.json --unused --no-dev lib/*",
+    "test:unit": "mkdir -p reports/ && NODE_ENV=test multi='spec=- xunit=reports/mocha-xunit.xml' istanbul cover _mocha -- -R mocha-multi && istanbul check-coverage",
+    "test:coveralls": "cat reports/coverage/lcov.info | node_modules/coveralls/bin/coveralls.js",
+    "test": "npm run lint && npm run test:unit",
+    "start": "bin/natsboard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devfacet/natsboard.git"
+  },
   "keywords": [
     "natsboard",
     "nats",
     "dashboard",
     "monitoring"
   ],
-  "homepage": "http://github.com/fatihcode/natsboard",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fatihcode/natsboard.git"
-  },
-  "bugs": {
-    "url": "http://github.com/fatihcode/natsboard/issues"
-  },
+  "author": "devfacet",
   "license": "MIT",
-  "private": false,
-  "author": {
-    "name": "fatih",
-    "url": "http://github.com/fatihcode"
-  },
-  "contributors": [],
-  "main": "./index.js",
-  "bin": {
-    "natsboard": "bin/natsboard"
-  },
-  "scripts": {
-    "lint": "jshint --reporter node_modules/jshint-stylish lib/*.js test/*.js",
-    "lint:build": "mkdir -p reports/ && jshint --reporter checkstyle lib/*.js test/*.js > reports/jshint-checkstyle.xml",
-    "depcheck": "dependency-check . lib/*",
-    "depcheck:unused": "dependency-check ./package.json --unused --no-dev lib/*",
-    "test:unit": "mkdir -p reports/ && NODE_ENV=test multi='spec=- xunit=reports/mocha-xunit.xml' istanbul cover _mocha -- -R mocha-multi test/test-*.js --timeout 10000 && istanbul check-coverage",
-    "test": "npm run depcheck && npm run depcheck:unused && npm run lint && npm run test:unit",
-    "start": "bin/natsboard"
-  },
-  "engines": {
-    "node": ">=0.10.0"
-  },
+  "homepage": "http://github.com/devfacet/natsboard",
   "dependencies": {
-    "express": "4.14.x",
-    "request": "2.75.x",
-    "utilex": "3.0.x",
+    "express": "4.15.x",
+    "request": "2.80.x",
+    "utilex": "3.x.x",
     "nodejs-websocket": "1.7.x"
   },
   "devDependencies": {
     "chai": "3.5.x",
     "jshint": "2.9.x",
     "jshint-stylish": "2.2.x",
-    "mocha": "2.5.x",
-    "mocha-multi": "0.9.x",
-    "dependency-check": "2.6.x",
-    "istanbul": "0.4.x"
+    "mocha": "3.2.x",
+    "mocha-multi": "0.10.x",
+    "dependency-check": "2.8.x",
+    "istanbul": "0.4.x",
+    "nats": "0.7.x"
   }
 }
