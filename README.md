@@ -41,4 +41,3 @@ For the full copyright and license information, please view the LICENSE.txt file
 
 [travis-url]: https://travis-ci.org/devfacet/natsboard
 [travis-image]: https://travis-ci.org/devfacet/natsboard.svg?branch=master
-

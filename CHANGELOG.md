@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.3 (2017-05-06)
+
+- Resolve #3
+- Maintenance
+
 ## 4.0.2 (2016-09-24)
 
 - Update dependencies
