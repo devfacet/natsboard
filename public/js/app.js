@@ -14,12 +14,14 @@ var app = function app() {
 
   // Init server
   var serverURL    = location.protocol + '//' + location.hostname + ':' + location.port,
-      serverCharts = {};
+      serverCharts = {},
+      wsProtocol = "ws:";
 
-  // Init websocket
-  var wsHostname = location.hostname,
-      wsPort     = parseInt(location.port) + 1,
-      wsUrl      = 'ws://' + wsHostname + ':' + wsPort,
+  if (window.location.protocol == "https:") {
+      wsProtocol = "wss:";
+  }
+
+  var wsUrl      = wsProtocol + location.hostname + ':' + location.port + '/ws',
       wsConn     = new WebSocket(wsUrl);
 
   // Handler for open event
