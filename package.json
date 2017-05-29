@@ -33,7 +33,7 @@
     "express": "4.15.x",
     "request": "2.80.x",
     "utilex": "3.x.x",
-    "nodejs-websocket": "1.7.x"
+    "ws": "^3.0.0"
   },
   "devDependencies": {
     "chai": "3.5.x",
