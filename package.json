@@ -1,6 +1,6 @@
 {
   "name": "natsboard",
-  "version": "4.0.3",
+  "version": "5.0.0",
   "description": "Dashboard for monitoring NATS",
   "main": "index.js",
   "bin": {

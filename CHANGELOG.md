@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.0 (2017-05-29)
+
+- Run the Websockets on the same port (fixes #1)
+- Remove NODE_PORTWS
+
 ## 4.0.3 (2017-05-06)
 
 - Resolve #3
