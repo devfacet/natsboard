@@ -3,7 +3,7 @@
  * For the full copyright and license information, please view the LICENSE.txt file.
  */
 
-/* jslint  browser: true */
+/* jslint  browser: true, esversion: 6, -W097 */
 /* global document: false, $: false, console: false, SmoothieChart: false, TimeSeries: false */
 'use strict';
 
@@ -13,16 +13,13 @@ var app = function app() {
   var PAGE_DASHBOARD = '/dashboard.html';
 
   // Init server
-  var serverURL    = location.protocol + '//' + location.hostname + ':' + location.port,
-      serverCharts = {},
-      wsProtocol = "ws:";
+  var serverURL    = location.protocol + '//' + location.hostname + ':' + location.port;
+  var serverCharts = {};
 
-  if (window.location.protocol == "https:") {
-      wsProtocol = "wss:";
-  }
-
-  var wsUrl      = wsProtocol + location.hostname + ':' + location.port + '/ws',
-      wsConn     = new WebSocket(wsUrl);
+  // Init websocket
+  var wsProtocol = (location.protocol == 'https:') ? 'wss:' : 'ws:';
+  var wsUrl      = wsProtocol + location.hostname + ':' + location.port + '/ws';
+  var wsConn     = new WebSocket(wsUrl);
 
   // Handler for open event
   wsConn.onopen = function onopen() {
