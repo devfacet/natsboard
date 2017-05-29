@@ -33,7 +33,7 @@
     "express": "4.15.x",
     "request": "2.80.x",
     "utilex": "3.x.x",
-    "ws": "^3.0.0"
+    "ws": "3.x.x"
   },
   "devDependencies": {
     "chai": "3.5.x",
