@@ -1,4 +1,4 @@
-/* jslint node: true */
+/* jslint node: true, esversion: 6 */
 /* global describe: false, it: false */
 'use strict';
 
