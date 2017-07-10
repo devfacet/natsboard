@@ -2,7 +2,7 @@ FROM node:8.1.3-alpine
 
 WORKDIR /app
 COPY . .
-npm install --production
+RUN npm install --production
 
 EXPOSE 3000
 
