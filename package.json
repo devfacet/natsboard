@@ -31,18 +31,18 @@
   "homepage": "http://github.com/devfacet/natsboard",
   "dependencies": {
     "express": "4.15.x",
-    "request": "2.80.x",
+    "request": "^2.81.0",
     "utilex": "3.x.x",
     "ws": "3.x.x"
   },
   "devDependencies": {
-    "chai": "3.5.x",
+    "chai": "^4.1.2",
+    "dependency-check": "^2.9.1",
+    "istanbul": "0.4.x",
     "jshint": "2.9.x",
     "jshint-stylish": "2.2.x",
-    "mocha": "3.2.x",
-    "mocha-multi": "0.10.x",
-    "dependency-check": "2.8.x",
-    "istanbul": "0.4.x",
+    "mocha": "^3.5.1",
+    "mocha-multi": "^0.11.0",
     "nats": "0.7.x"
   }
 }
