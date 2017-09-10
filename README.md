@@ -18,6 +18,13 @@ Dashboard for monitoring NATS. It provides real-time information from NATS serve
 npm install natsboard -g
 ```
 
+## Docker
+
+```bash
+docker build -t natsboard .
+docker run --rm -e NATS_MON_URL=http://localhost:8222 -t natsboard
+```
+
 ## Usage
 
 [gnatsd server](http://nats.io/download/) **must** be running with `-m` parameter.

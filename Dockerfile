@@ -1,8 +1,9 @@
-FROM node:8.1.3-alpine
+FROM node:8.4-alpine
 
 WORKDIR /app
-COPY . .
+ADD package.json package-lock.json /app/
 RUN npm install --production
+COPY . .
 
 EXPOSE 3000
 
