@@ -1434,12 +1434,6 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-nats@0.7.x:
-  version "0.7.29"
-  resolved "https://registry.yarnpkg.com/nats/-/nats-0.7.29.tgz#23b203a1102887a42cc378f521cb3dc182c31327"
-  dependencies:
-    nuid ">=0.6.8"
-
 negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
@@ -1458,10 +1452,6 @@ normalize-package-data@^2.0.0:
     is-builtin-module "^1.0.0"
     semver "2 || 3 || 4 || 5"
     validate-npm-package-license "^3.0.1"
-
-nuid@>=0.6.8:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/nuid/-/nuid-1.0.0.tgz#04ecc21be41cc321940a9089984382f3bdc61638"
 
 oauth-sign@~0.8.2:
   version "0.8.2"
