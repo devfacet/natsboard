@@ -150,26 +150,23 @@ var app = function app() {
     var content;
 
     // Iterate data
-    for(var key in data.connections) {
-      if(data.connections.hasOwnProperty(key)) {
+    for(var i = 0; i < data.connections.length; i++) {
+      var val = data.connections[i];
 
-        var val = data.connections[key];
+      // Row
+      content += '<tr id="connz-list-row-' + val.cid + '" class="small">';
 
-        // Row
-        content += '<tr id="connz-list-row-' + val.cid + '" class="small">';
+      // Columns
+      content += '<td>' + val.cid + '</td>';
+      content += '<td>' + val.ip + ':' + val.port + '</td>';
+      content += '<td>' + val.lang + '/' + val.version + (val.name ? ' (' + val.name + ')' : '') + '</td>';
+      content += '<td>' + val.pending_bytes + '</td>';
+      content += '<td>' + val.in_msgs + '/' + val.out_msgs + '</td>';
+      content += '<td>' + val.in_bytes + '/' + val.out_bytes + '</td>';
+      content += '<td>' + val.subscriptions + '</td>';
+      content += '<td>' + (val.subscriptions_list ? val.subscriptions_list.join('<br />') : '') + '</td>';
 
-        // Columns
-        content += '<td>' + val.cid + '</td>';
-        content += '<td>' + val.ip + ':' + val.port + '</td>';
-        content += '<td>' + val.lang + '/' + val.version + (val.name ? ' (' + val.name + ')' : '') + '</td>';
-        content += '<td>' + val.pending_bytes + '</td>';
-        content += '<td>' + val.in_msgs + '/' + val.out_msgs + '</td>';
-        content += '<td>' + val.in_bytes + '/' + val.out_bytes + '</td>';
-        content += '<td>' + val.subscriptions + '</td>';
-        content += '<td>' + (val.subscriptions_list ? val.subscriptions_list.join(', ') : '') + '</td>';
-
-        content += '</tr>';
-      }
+      content += '</tr>';
     }
 
     // If content exists then
@@ -196,27 +193,24 @@ var app = function app() {
     var content;
 
     // Iterate data
-    for(var key in data.routes) {
-      if(data.routes.hasOwnProperty(key)) {
+    for(var i = 0; i < data.routes.length; i++) {
+      var val = data.routes[i];
 
-        var val = data.routes[key];
+      // Row
+      content += '<tr id="routez-list-row-' + val.cid + '" class="small">';
 
-        // Row
-        content += '<tr id="routez-list-row-' + val.cid + '" class="small">';
+      // Columns
+      content += '<td>' + val.rid + '</td>';
+      content += '<td>' + val.ip + ':' + val.port + '</td>';
+      content += '<td>' + val.remote_id + '</td>';
+      content += '<td>' + val.did_solicit + '</td>';
+      content += '<td>' + val.pending_size + '</td>';
+      content += '<td>' + val.in_msgs + ' / ' + val.out_msgs + '</td>';
+      content += '<td>' + val.in_bytes + ' / ' + val.out_bytes + '</td>';
+      content += '<td>' + val.subscriptions + '</td>';
+      content += '<td>' + (val.subscriptions_list ? val.subscriptions_list.join(', ') : '') + '</td>';
 
-        // Columns
-        content += '<td>' + val.rid + '</td>';
-        content += '<td>' + val.ip + ':' + val.port + '</td>';
-        content += '<td>' + val.remote_id + '</td>';
-        content += '<td>' + val.did_solicit + '</td>';
-        content += '<td>' + val.pending_size + '</td>';
-        content += '<td>' + val.in_msgs + ' / ' + val.out_msgs + '</td>';
-        content += '<td>' + val.in_bytes + ' / ' + val.out_bytes + '</td>';
-        content += '<td>' + val.subscriptions + '</td>';
-        content += '<td>' + (val.subscriptions_list ? val.subscriptions_list.join(', ') : '') + '</td>';
-
-        content += '</tr>';
-      }
+      content += '</tr>';
     }
 
     // If content exists then
